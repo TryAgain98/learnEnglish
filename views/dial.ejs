@@ -1,0 +1,45 @@
+<html>
+
+<head>
+  <%- include('head') -%>
+  
+</head>
+<script>
+  $(document).ready(function () {
+    function getHTML(data) {//get data from search
+                var text = '<h1 style="color:red">';
+                for(var number of data.newArr){
+                  text+=`  ${number}  <span style="color:black">|</span>`;
+                }
+                text+='</h1>'
+                return text;
+            }
+
+      $('#number').keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == 13) {
+          var number = $('#number').val();
+         
+          $.get("/startDial?number=" + number, function (data) {
+            console.log(data)
+                   var text=getHTML(data);
+                   $('.dial').html(text);
+                });
+        }
+        })
+        });
+</script>
+<body>
+  <%- include('header') -%>
+  
+  <div class="container" >
+        <div class="form-group">
+         <h1 style="text-align: center; color: blue;">Dial</h1>
+          <input type="text" class="form-control" name="number" id="number" autofocus placeholder="number">
+        </div>
+    <div class="dial">
+
+    </div>
+  </div>
+</body>
+</html>

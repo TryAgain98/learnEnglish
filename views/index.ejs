@@ -1,0 +1,63 @@
+<html>
+
+<head>
+    <%- include('head') -%>
+
+</head>
+
+<body>
+    <%- include('header') -%>
+    <div class="container">
+
+        <div class="row">
+
+            <div class="col-5">
+                <h1 style="text-align: center; color: blue;">LIST LESSON</h1>
+                <div class="list-group listLesson" id="list-tab" role="tablist">
+                    <% for(var i=0;i< lesson.length;i++) {%>
+                    <a class="list-group-item list-group-item-action"
+                        href="/vocabulary/showVocabularyFromLesson?id=<%=lesson[i]._id %>"
+                        aria-controls="profile"><%= lesson[i].name %> : <%= lesson[i].tittle %> </a>
+                    <%}%>
+                </div>
+            </div>
+            <div class="col-7">
+                <h1 style="text-align: center; color: blue;">LIST VOCABULARY :<span style="color: green;"> <%=totalNumberVocabulary %></span></h1>
+                <table class="table table-dark">
+                    <thead>
+                        <tr>
+                            <th scope="col">STT</th>
+                            <th scope="col">vocabulary</th>
+                            <th scope="col">translate</th>
+                            <th scope="col">Update</th>
+                            <th scope="col">delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for(var i= 0 ;i < vocabulary.length ;i++) {%>
+                    <tr>
+                        <td> <%= i+1 %></td>
+                        <td> <%= vocabulary[i].vocabulary %></td>
+                        <td> <%= vocabulary[i].translate %></td>
+                        <td><a href="/vocabulary/editVocabulary?_id=<%= vocabulary[i]._id %>"><button type="button"
+                                    class="btn btn-primary"><i class="fas fa-user-edit"></i></button></a></td>
+
+                        <td><button type="button" class="btn btn-danger btna" data-toggle="modal"
+                                data-id="/vocabulary/deleteVocabulary?id=<%= vocabulary[i]._id %>"
+                                data-target="#exampleModalCenter">
+                                <i class="far fa-trash-alt"></i>
+                            </button></td>
+                    </tr>
+                    <%} %>
+
+                    </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+
+</body>
+
+</html>

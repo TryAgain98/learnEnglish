@@ -1,0 +1,22 @@
+.iconWarning{
+	color: #ffc107;
+	font-size: 80px;
+	text-align: center;
+	margin-left: 201px;
+}
+#exampleModalLongTitle{
+	width: 100%;
+}
+#tittleWarning{
+	text-transform: uppercase;
+	font-weight: bold;
+	text-align: center;
+}
+#footerWarning{
+	justify-content: center;
+	border-top: none;
+}
+#modalDelete{
+    position: relative;
+    
+}

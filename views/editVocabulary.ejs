@@ -1,0 +1,39 @@
+<html>
+
+<head>
+  <%- include('head') -%>
+</head>
+
+<body>
+  <%- include('header') -%>
+
+      <div class="container" style="margin-top: 20px;display: flex;justify-content: center;">
+        <form style="width: 50%;" action="/vocabulary/editVocabulary" method="POST">
+          <h1 style="text-align: center;">Update Vocabulary</h1>
+          <input type="hidden" name="_id" value="<%= vocabulary._id %>" />
+          <div class="form-group">
+            <label for="exampleInputEmail1">Vocabulary</label>
+            <input type="text" class="form-control" autocomplete="off" value="<%= vocabulary.vocabulary %>" name="vocabulary" id="exampleInputEmail1" aria-describedby="emailHelp" >
+          </div>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Translate</label>
+            <input type="text" class="form-control" autocomplete="off" value="<%= vocabulary.translate %>" name="translate" id="exampleInputEmail1" aria-describedby="emailHelp" >
+          </div>
+          <div class="form-group">
+            <label for="exampleFormControlSelect2">lesson</label>
+            <select multiple class="form-control" name="_idLesson" id="exampleFormControlSelect2">
+                <% for(var i=0;i < lesson.length;i++) {
+                    if(vocabulary._idLesson == lesson[i]._id){ %>
+              <option selected value='<%=lesson[i]._id %>' </option> <%= lesson[i].name %></option>
+              <%}else {%>
+                <option  value='<%=lesson[i]._id %>' </option> <%= lesson[i].name %></option>
+              <%}}%>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+
+</body>
+
+</html>

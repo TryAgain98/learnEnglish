@@ -1,0 +1,140 @@
+<html>
+
+<head>
+
+  <%- include('head') -%>
+  <script type='text/javascript'>
+    function getListVocabulary() {
+      var listV = [];
+      '<% for(var i=0; i < listVocabulary.length; i++){ %>'
+      listV['<%= i %>'] = {
+        _id: '<%= listVocabulary[i]._id %>',
+        translate: '<%= listVocabulary[i].translate %>',
+        vocabulary: '<%= listVocabulary[i].vocabulary %>',
+        _idLesson: '<%= listVocabulary[i]._idLesson %>',
+      };
+      ' <%} %>'
+      return listV;
+    }
+
+  </script>
+
+  <script>
+    var listV = getListVocabulary();
+    var numberFalseAnswer = 0;
+    var listWrongV = [];
+    var socket = io();
+    $(document).ready(function () {
+      $('#vocabulary').keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == 13) {
+          var vocabulary = $('#vocabulary').val();
+          var numberTrueAnswer = $('#numberTrueAnswer').text();
+          socket.emit('client-send', { //send data for server
+            vocabulary: vocabulary,
+            listVocabulary: listV,
+            numberTrueAnswer: numberTrueAnswer,
+            totalQ: $('#totalQ').text(),
+            numberFalseAnswer,
+            listWrongV
+          });
+
+        }
+      });
+      socket.on('server-send', function (data) {
+        if (data.correctAnswer != null) {
+          var { inputVocabulary, oldVocabulary, translate } = data.correctAnswer
+          Swal.fire({
+            icon: 'error',
+            title: inputVocabulary + ' : wrong | ' + oldVocabulary + ' : ' + translate,
+            text: 'is correct answer . stupid !'
+          })
+        }
+
+        var numberTrueAnswer = data.numberTrueAnswer;
+        var listVocabulary = data.listVocabulary;
+        listV = listVocabulary;
+        numberFalseAnswer = data.numberFalseAnswer;
+        listWrongV = data.listWrongV;
+        $('#numberTrueAnswer').text(numberTrueAnswer);
+        $('#newTranslate').text(listVocabulary[0].translate);
+        $('#vocabulary').val('');
+        $('#translate').val(listVocabulary[0].translate);
+
+      });
+
+
+      socket.on('server-send-inform', function (data) {
+        Swal.fire({
+          icon: 'succed',
+          title: 'Grade : ' + data.grade + 'đ',
+          text: 'Number True Answer : ' + data.numberTrueAnswer + '/' + data.totalQ
+        });
+        var resutl = showListVWrong(data.listWrongV,data.grade);
+        $('.wrongV').append(resutl);
+      });
+
+
+    });
+    function showListVWrong(data,grade) {
+      var result = '<h3 id="tittleWrong">List Vocabulary wrong : ' + grade + 'đ</h3>';
+      if (data.length > 0) {
+        for (var v of data) {
+          result += `<h4>  ${v.vocablary} <span> : ${v.translate} </span></h4>`;
+        }
+      }
+
+      return result;
+    }
+
+  </script>
+ 
+</head>
+
+<body>
+  <%- include('header') -%>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-1 left">
+    
+        <!-- <img id='imgLeft' src="/images/a.jpg" alt=""> -->
+      </div>
+      <div class="col-10">
+        <div id="formExam">
+          <% if( listVocabulary.length !=0) {%>
+          <h1 style="text-align: center;text-transform: uppercase;">Take an exam : <span style="color: red;">
+              <%= nameLesson %></span></span>
+            <h3 style="text-align: center; color: cornflowerblue;text-transform: uppercase;">Number True Answer :<span
+                id="numberTrueAnswer"><%= numberTrueAnswer %></span> /
+              <span id="totalQ"> <%= countQuestion %> </span></h3>
+            <div class="form-group">
+
+              <label for="vocabulary" style="text-transform: uppercase;font-weight: bold;">Vocabulary : <span
+                  id="newTranslate" style="color: fuchsia; font-weight: bold; text-transform: uppercase;">
+                  <%= listVocabulary[0].translate %></span> </label>
+
+              <input type="text" autocomplete="off" class="form-control" autofocus name="vocabulary" id="vocabulary"
+                aria-describedby="emailHelp"c style="color: black !important;
+                 font-weight: bold !important;font-size: 2rem !important;text-transform: capitalize !important;">
+            </div>
+            <%}else{%>
+            <h1 style="text-align: center; color: red;">Sorry ! Add vocabulary</h1>
+            <%}%>
+            <div class='wrongV'>
+             
+            </div>
+        </div>
+      </div>
+      <div class="col-1 right" >
+        <!-- <img id='imgRight' src="/images/b.jpg" alt=""> -->
+       
+      </div>
+    </div>
+    
+
+  </div>
+
+</body>
+
+</html>

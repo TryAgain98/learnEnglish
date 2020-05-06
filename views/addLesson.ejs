@@ -1,0 +1,97 @@
+<html>
+
+<head>
+  <%- include('head') -%>
+</head>
+
+<body>
+  <%- include('header') -%>
+
+  <div class="container " >
+    <div class="row">
+      <div class="col-9">
+        <h1 style="text-align: center; color: blue;">LIST LESSON : <%= totalNumberLesson %></h1>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">STT</th>
+              <th scope="col">name</th>
+              <th scope="col">tittle</th>
+              <th scope="col">Translate tittle</th>
+              <th scope="col">Update</th>
+              <th scope="col">delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% for(var i= 0 ;i < lessonPage.length ;i++) {%>
+            <tr>
+              <td> <%= i+1 %></td>
+              <td> <%= lessonPage[i].name %></td>
+              <td> <%= lessonPage[i].tittle %></td>
+              <td> <%= lessonPage[i].translateTittle %></td>
+              <td><a href="/vocabulary/editLesson?_id=<%= lessonPage[i]._id %>"><button type="button"
+                    class="btn btn-primary"><i class="fas fa-user-edit"></i></button></a></td>
+              <td><a href="/vocabulary/deleteLesson?_id=<%= lessonPage[i]._id %>"><button type="button"
+                    class="btn btn-danger"><i class="fas fa-trash-alt"></i></button></a></td>
+            </tr>
+            <%} %>
+
+          </tbody>
+        </table>
+        <nav aria-label="Page navigation example" >
+          <ul class="pagination">
+            <li class="page-item">
+              <% if(skip == 0) {%>
+                <a class="page-link" href="showLessonPage?id=<%= skip %>" aria-label="Previous">
+                <%}else{%>
+                  <a class="page-link" href="showLessonPage?id=<%= skip -1 %>" aria-label="Previous">
+                <%}%>
+             
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">Previous</span>
+              </a>
+            </li>
+            <% for(var i=0;i< totalNumberPage ; i++ ){%>
+              <li class="page-item"><a class="page-link" href="showLessonPage?id=<%= i %>"><%= i+1 %></a></li>
+              <%}%>
+            
+            <li class="page-item">
+              <% if(skip == totalNumberPage - 1 ) {%>
+                <a class="page-link" href="showLessonPage?id=<%= skip  %>" aria-label="Next">
+                <%}else{%>
+                  <a class="page-link" href="showLessonPage?id=<%= skip +1 %>" aria-label="Next">
+                <%}%>
+            
+                <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">Next</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+      <div class="col-3">
+        <form action="/vocabulary/addLesson" method="POST">
+          <h1 style="text-align: center; color: blue;">ADD LESSON</h1>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Name lesson : </label>
+            <input type="text" name="name" autocomplete="off" autofocus class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+>
+
+          </div>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Tittle lesson : </label>
+            <input type="text" name="tittle" autocomplete="off" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+          </div>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Translate tittle lesson : </label>
+            <input type="text" name="translateTittle" autocomplete="off" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%;">Add</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
